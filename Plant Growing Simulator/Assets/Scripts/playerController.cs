@@ -19,6 +19,6 @@ public class playerController : MonoBehaviour {
     private void move()
     {
         Vector3 inputVector = new Vector3(Input.GetAxis("Horizontal"), 0, 0).normalized * maxspeed;
-        rb.velocity += inputVector - rb.velocity;
+        rb.velocity += 0.05f * (inputVector - rb.velocity);
     }
 }
