@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class SunScript : MonoBehaviour
+public class PraiseTheSun : MonoBehaviour
 {
    [SerializeField]
    private float m_Speed;
