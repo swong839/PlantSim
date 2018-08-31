@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerController : MonoBehaviour {
+public class cloudController : MonoBehaviour {
     
     Rigidbody rb;
     
@@ -12,16 +12,16 @@ public class playerController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
 	}
 	
-	void Update () {
+	void FixedUpdate () {
         move();
 	}
 
     private void move()
     {
         if (Input.GetAxis("Horizontal") == 0) {
-            rb.velocity -= 0.25f * rb.velocity.normalized;
+            rb.velocity -= 20 * rb.velocity.normalized * Time.fixedDeltaTime;
         } else if (rb.velocity.magnitude < maxspeed) {
-            rb.velocity += 0.25f * new Vector3(Input.GetAxis("Horizontal"), 0, 0).normalized;
+            rb.velocity += 20 * new Vector3(Input.GetAxis("Horizontal"), 0, 0).normalized * Time.fixedDeltaTime;
         }
     }
 }
