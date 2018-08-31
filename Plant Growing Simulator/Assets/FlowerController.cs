@@ -10,12 +10,8 @@ public class FlowerController : MonoBehaviour
    [SerializeField]
    private ParticleSystem m_DoneGrowingPS;
   
-   private int m_MaxGrowth;
-
    private float m_CurrentGrowth;
    private int m_CurrentStage;
-
-   private bool m_IsGrowing;
 
 
    private SpriteRenderer m_SpriteRenderer;
@@ -25,9 +21,7 @@ public class FlowerController : MonoBehaviour
    {
       m_SpriteRenderer = GetComponent<SpriteRenderer>();
 
-      m_MaxGrowth = m_Stages.Length;
       m_CurrentGrowth = m_CurrentStage = 0;
-      m_IsGrowing = false;
    }
 
    public void Grow(float amt)
@@ -40,7 +34,10 @@ public class FlowerController : MonoBehaviour
       {
          m_SpriteRenderer.sprite = m_Stages[++m_CurrentStage];
          if (m_CurrentStage == m_Stages.Length - 1)
+         {
             m_DoneGrowingPS.Play();
+            GetComponent<BoxCollider2D>().enabled = false;
+         }
       }
    }
 

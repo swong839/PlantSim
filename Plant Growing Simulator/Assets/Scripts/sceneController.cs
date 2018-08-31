@@ -3,26 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class sceneController : MonoBehaviour {
+public class sceneController : MonoBehaviour
+{
+   public void GoToScene()
+   {
+      SceneManager.LoadScene(1);
+   }
 
-    string selfScene;
-
-	// Use this for initialization
-	void Start () {
-        selfScene = SceneManager.GetActiveScene().name;
-	}
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(selfScene);
-        }
-    }
-
-    public void GoToScene(string name)
-    {
-        SceneManager.LoadScene(name);
-    }
+   public void Quit()
+   {
+      Application.Quit();
+   }
 
 }

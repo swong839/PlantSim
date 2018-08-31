@@ -7,12 +7,38 @@ public class CloudController : MonoBehaviour {
     Rigidbody rb;
     
     public int maxspeed;
-    
-	void Start () {
+
+
+   private bool m_CanMove;
+
+   private void OnEnable()
+   {
+      GameManager.GameOverEvent += SetCanMoveFalse;
+   }
+
+   private void OnDisable()
+   {
+      GameManager.GameOverEvent -= SetCanMoveFalse;
+   }
+
+   private void SetCanMoveFalse()
+   {
+      m_CanMove = false;
+   }
+
+
+
+   private void Awake()
+   {
+      m_CanMove = true;
+   }
+
+   void Start () {
         rb = GetComponent<Rigidbody>();
 	}
 	
 	void FixedUpdate () {
+      if (m_CanMove)
         move();
 	}
 

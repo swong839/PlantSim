@@ -1,15 +1,37 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+   public delegate void EmptyDelegate();
+   public static event EmptyDelegate GameOverEvent;
+
+
+
+   [SerializeField]
+   private Text m_WinnerText;
+
+   [SerializeField]
+   private Text m_OptionsText;
+
    [SerializeField]
    private float m_WinCondition;
 
    private List<FlowerController> m_Flowers;
 
    private int m_TotalFlowers;
+
+
+   private bool m_GameOver;
+
+
+   private void Awake()
+   {
+      m_GameOver = false;
+   }
 
    private void Start()
    {
@@ -24,16 +46,26 @@ public class GameManager : MonoBehaviour
 
    private void Update()
    {
-      for (int i = 0; i < m_Flowers.Count; i++)
+      if (!m_GameOver)
       {
-         if (m_Flowers[i].IsGrown)
+         for (int i = 0; i < m_Flowers.Count; i++)
          {
-            m_Flowers.RemoveAt(i);
-            break;
+            if (m_Flowers[i].IsGrown)
+            {
+               m_Flowers.RemoveAt(i);
+               break;
+            }
          }
-      }
 
-      CheckSunWinCondition();
+         CheckSunWinCondition();
+      }
+      else
+      {
+         if (Input.GetKeyDown(KeyCode.Space))
+            SceneManager.LoadScene(1);
+         else if (Input.GetKeyDown(KeyCode.Escape))
+            SceneManager.LoadScene(0);
+      }
    }
 
    private void OnEnable()
@@ -50,12 +82,24 @@ public class GameManager : MonoBehaviour
    {
       if (1.0 * m_Flowers.Count / m_TotalFlowers < m_WinCondition)
       {
-         Debug.Log("hi");
+         EndGame("SUN");
       }
    }
 
    private void CloudWin()
    {
-      Debug.Log("cloud wins");
+      EndGame("CLOUD");
+   }
+
+   private void EndGame(string winner)
+   {
+      m_OptionsText.gameObject.SetActive(true);
+      m_WinnerText.gameObject.SetActive(true);
+      m_WinnerText.text = winner + " WON THE GAME!";
+
+      m_GameOver = true;
+
+      if (GameOverEvent != null)
+         GameOverEvent();
    }
 }

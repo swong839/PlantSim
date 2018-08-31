@@ -25,8 +25,6 @@ public class PraiseTheSun : MonoBehaviour
 
    private bool m_IsBlocked;
    
-   private bool m_Done;
-
 
 
    [SerializeField]
@@ -42,6 +40,7 @@ public class PraiseTheSun : MonoBehaviour
    private void Awake()
    {
       m_IsBlocked = false;
+      m_CanMove = true;
 
       m_OrigX = transform.position.x;
       m_OrigY = transform.position.y;
@@ -49,11 +48,33 @@ public class PraiseTheSun : MonoBehaviour
 
       m_Cam.backgroundColor = m_DawnColor;
    }
-   
+
+
+   private bool m_CanMove;
+
+   private void OnEnable()
+   {
+      GameManager.GameOverEvent += SetCanMoveFalse;
+   }
+
+   private void OnDisable()
+   {
+      GameManager.GameOverEvent -= SetCanMoveFalse;
+   }
+
+   private void SetCanMoveFalse()
+   {
+      m_CanMove = false;
+   }
+
+
 
 
    private void Update()
    {
+      if (!m_CanMove)
+         return;
+
       FloatAcrossSky();
 
       if (Input.GetAxis("Horizontal2") != 0)
@@ -68,11 +89,11 @@ public class PraiseTheSun : MonoBehaviour
 
    private void FloatAcrossSky()
    {
-      if (!m_Done)
+      if (m_CanMove)
          transform.position = UpdatePos(transform.position.x + m_Speed * Time.deltaTime);
-      if (transform.position.x > -m_OrigX && !m_Done)
+      if (transform.position.x > -m_OrigX && m_CanMove)
       {
-         m_Done = true;
+         m_CanMove = false;
          if (SunAtPathEndEvent != null)
             SunAtPathEndEvent();
       }
@@ -80,7 +101,12 @@ public class PraiseTheSun : MonoBehaviour
 
    private void ChangeSky(float x)
    {
-      Color inBetween = Color.Lerp(m_DawnColor, m_NoonColor, (x - m_OrigX) / m_OrigX);
+      float t = (m_OrigX - x) / m_OrigX;
+      Color inBetween;
+      if (t < 0.98f)
+         inBetween = Color.Lerp(m_DawnColor, m_NoonColor, t);
+      else
+         inBetween = Color.Lerp(m_DuskColor, m_NoonColor, 2 - t);
 
       m_Cam.backgroundColor = inBetween;
    }
