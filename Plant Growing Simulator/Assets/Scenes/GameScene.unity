@@ -86349,7 +86349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_WinnerText: {fileID: 708916532}
   m_OptionsText: {fileID: 1602177391}
-  m_WinCondition: 0.4
+  m_WinCondition: 0.51
 --- !u!4 &1909013696
 Transform:
   m_ObjectHideFlags: 0
